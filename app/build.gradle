@@ -43,7 +43,7 @@ dependencies {
     provided 'org.glassfish:javax.annotation:10.0-b28'
 
     // ButterKnife
-    compile 'com.jakewharton:butterknife:6.0.0'
+    compile 'com.jakewharton:butterknife:7.0.1'
 
     // Retrofit
     compile 'com.squareup.retrofit:retrofit:1.7.1'

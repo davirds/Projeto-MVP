@@ -24,12 +24,4 @@
         </activity>
     </application>
 
-    <!--Parse config metadata-->
-    <meta-data
-        android:name="com.parse.APPLICATION_ID"
-        android:value="8MlYlVEvNhgaNFzZZdMnnyT0GbmNcCyTI6ZmkyC2" />
-    <meta-data
-        android:name="com.parse.CLIENT_KEY"
-        android:value="CfQutLba5T5vRrG436faOJBvIzQmvI2JmfSSe45Y" />
-
 </manifest>

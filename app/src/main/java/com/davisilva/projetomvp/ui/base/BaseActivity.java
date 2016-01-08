@@ -12,8 +12,6 @@ public abstract class BaseActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-//        View view = LayoutInflater.from(this).inflate(R.layout.base, null);
-//        setContentView(view);
         selectScreenOrientation();
     }
 
