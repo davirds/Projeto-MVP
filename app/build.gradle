@@ -1,0 +1,100 @@
+apply plugin: 'com.android.application'
+apply plugin: 'android-apt'
+apply plugin: 'checkstyle'
+apply plugin: 'findbugs'
+apply plugin: 'jacoco'
+
+android {
+    compileSdkVersion 23
+    buildToolsVersion "23.0.2"
+
+    defaultConfig {
+        applicationId "com.davisilva.projetomvp"
+        minSdkVersion 19
+        targetSdkVersion 23
+        versionCode 1
+        versionName "1.0"
+    }
+
+    buildTypes {
+        release {
+            minifyEnabled false
+            proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
+        }
+        debug {
+            testCoverageEnabled true
+        }
+    }
+}
+
+dependencies {
+    compile fileTree(dir: 'libs', include: ['*.jar'])
+
+    testCompile 'junit:junit:4.12'
+    testCompile "org.robolectric:robolectric:3.0"
+
+    compile 'com.android.support:appcompat-v7:23.0.1'
+
+    // Dagger
+    compile 'javax.inject:javax.inject:1'
+    compile 'javax.annotation:javax.annotation-api:1.2'
+    compile 'com.google.dagger:dagger:2.0.1'
+    apt 'com.google.dagger:dagger-compiler:2.0.1'
+    provided 'org.glassfish:javax.annotation:10.0-b28'
+
+    // ButterKnife
+    compile 'com.jakewharton:butterknife:6.0.0'
+
+    // Retrofit
+    compile 'com.squareup.retrofit:retrofit:1.7.1'
+
+    // Picasso
+    compile 'com.squareup.picasso:picasso:2.4.0'
+}
+
+task checkstyle(type: Checkstyle) {
+    configFile file("$project.rootDir/config/checkstyle/checkstyle.xml")
+    source 'src'
+    include '**/*.java'
+    classpath = files()
+}
+
+task findbugs(type: FindBugs, dependsOn: assembleDebug) {
+    ignoreFailures = false
+    effort = 'max'
+    reportLevel = 'high'
+    excludeFilter = new File("${project.rootDir}/config/findbugs/findbugs-filter.xml")
+    classes = files("${project.rootDir}/app/build/intermediates/classes")
+
+    source 'src'
+    include '**/*.java'
+    exclude '**/gen/**'
+
+    reports {
+        xml.enabled = false
+        html.enabled = true
+    }
+
+    classpath = files()
+}
+
+task jacocoTestReport(type: JacocoReport, dependsOn: 'testDebugUnitTest') {
+
+    reports {
+        xml.enabled = true
+        html.enabled = true
+    }
+
+    jacocoClasspath = configurations['androidJacocoAnt']
+    def fileFilter = ['**/R.class', '**R$*.class', '**/BuildConfig.*', '**/Manifest*.*', '**/*Test*.*', 'android/**/*.*']
+    def debugTree = fileTree(dir: "${buildDir}/intermediantes/class/debug", excludes: fileFilter)
+    def mainSrc = "${project.projectDir}/src/main/java"
+    def unitTestData = "${buildDir}/jacoco/testDebugUnitTest.exec"
+    def coverageData = "${buildDir}/outputs/code-coverage/connected/coverage.ec"
+
+    sourceDirectories = files([mainSrc])
+    classDirectories = files([debugTree])
+    executionData = files([unitTestData, coverageData])
+}
+
+check.dependsOn 'checkstyle', 'findbugs'
