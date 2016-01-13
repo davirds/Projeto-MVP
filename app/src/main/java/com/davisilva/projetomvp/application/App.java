@@ -2,7 +2,7 @@ package com.davisilva.projetomvp.application;
 
 import android.app.Application;
 
-import com.davisilva.projetomvp.parse.CredentialsTable;
+import com.davisilva.projetomvp.parse.table.CredentialsTable;
 import com.parse.Parse;
 import com.parse.ParseObject;
 
